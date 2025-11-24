@@ -5,7 +5,7 @@ namespace Tyuiu.GogolevVM.Sprint5.Task0.V20.Lib
     {
         public string SaveToFileTextData(int x)
         {
-            string path = $@"{Directory.GetCurrentDirectory()}\OutPutFileTask0.txt";
+            string path = Path.Combine(Directory.GetCurrentDirectory(), "OutPutFileTask0.txt");
 
             double z;
 
