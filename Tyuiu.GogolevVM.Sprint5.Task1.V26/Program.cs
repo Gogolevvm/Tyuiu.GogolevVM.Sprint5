@@ -19,7 +19,7 @@ internal class Program
         {
             if ((Math.Cos(i) + i) != 0)
             {
-                y = Math.Round(((2 * i + 6 / (Math.Cos(i) + i)) - 3), 2);
+                y = Math.Round((((2 * i + 6) / (Math.Cos(i) + i)) - 3), 2);
             }
             else
             {

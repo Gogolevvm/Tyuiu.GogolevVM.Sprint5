@@ -19,7 +19,7 @@ namespace Tyuiu.GogolevVM.Sprint5.Task1.V26.Lib
 
             for (int x = startValue; x <= stopValue; x++)
             {
-                y = ((2 * x + 6 / (Math.Cos(x) + x)) - 3);
+                y = (((2 * x + 6) / (Math.Cos(x) + x)) - 3);
                 if  (Math.Cos(x) + x == 0)
                 {
                     y = 0;
