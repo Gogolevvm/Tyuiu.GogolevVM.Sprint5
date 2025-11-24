@@ -3,10 +3,20 @@ internal class Program
 {
     private static void Main(string[] args)
     {
-        string outputFile = "OutPutFileTask0.txt";
-        double x1 = 3;
-        double result = 4 * Math.Pow(x1, 2) - 3 * x1 + 2;  
-        File.AppendAllText(outputFile, result.ToString());
+        double start = -8, end = -6, step = 1;
+        string outputFile = "OutPutFileTask1.txt";
+        for (double x = start; x <= end; x+= step)
+        {
+            double result = 2 * x + 3 * Math.Pow(x, 2) + 4;
+            if (double.IsInfinity(result) || double.IsNaN(result))
+            {
+                result = 0;
+            }
+            result = Math.Round(result,2);
+            File.AppendAllText(outputFile, $"{result}\n");
+            Console.WriteLine($"{result}");
+        }
+
 
     }
 }
