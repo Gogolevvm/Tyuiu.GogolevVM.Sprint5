@@ -1,50 +1,40 @@
-﻿using System.Reflection.PortableExecutable;
+﻿using System;
+using System.IO;
 using tyuiu.cources.programming.interfaces.Sprint5;
+
 namespace Tyuiu.GogolevVM.Sprint5.Task5.V20.Lib
 {
     public class DataService : ISprint5Task5V20
     {
         public double LoadFromDataFile(string path)
         {
+            double sum = 0;
             int count = 0;
-            double res = 0;
 
-            string text = File.ReadAllText(path);
-
-            string[] strings = text.Split(' ');
-            List<string> wholeNumbers = new List<string>();
-            foreach (string str in strings)
-            {
-                if (int.TryParse(str.Trim(), out int number) && Math.Abs(number % 1) == 0)
-                {
-
-                    wholeNumbers.Add(str);
-                    count++;
-                }
-            }
-            File.WriteAllLines(path, wholeNumbers);
-
+            // ТОЛЬКО ЧТЕНИЕ, никакой записи!
             using (StreamReader reader = new StreamReader(path))
             {
                 string line;
                 while ((line = reader.ReadLine()) != null)
                 {
-                    if (int.TryParse(line.Trim(), out int number) && Math.Abs(number%1) == 0)
+                    line = line.Trim();
+                    if (string.IsNullOrEmpty(line))
+                        continue;
+
+                    // Пытаемся распарсить как целое число
+                    if (int.TryParse(line, out int number))
                     {
-                        // условие while
-                        res = res + Convert.ToDouble(line);
+                        sum += number;
                         count++;
                     }
-
-                    
                 }
             }
-            res = res / count;
-            res = Math.Round(res,3);
-            return res;
-            
 
+            if (count == 0)
+                return 0;
 
+            double average = sum / count;
+            return Math.Round(average, 3);
         }
     }
 }
