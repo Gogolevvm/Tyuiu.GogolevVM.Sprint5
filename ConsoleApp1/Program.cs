@@ -3,13 +3,13 @@ internal class Program
 {
     private static void Main(string[] args)
     {
-        string outputFile = "OutPutFileTask3.bin";
-        double x3 = 4;
-        double result10 = 2 *  Math.Pow(x3, 4) - 3 * Math.Pow(x3,3) + 5 * Math.Pow(x3,2) - 6 * x3 + 1 ;
-        using (BinaryWriter writer = new BinaryWriter(File.Open(outputFile,FileMode.Append)))
-        {
-            writer.Write(result10);
-        }
+        double x = 0;
+        // Читаем весь текст из файла
+        string data = File.ReadAllText(@"C:\Users\Home\source\repos\Tyuiu.GogolevVM.Sprint5\ConsoleApp1\bin\Debug\net8.0\InPutDataFileTAsk4V0.txt");
+        // "Превращаем текст в число"
+        x = double.Parse(data);
+        double result = 4 * Math.Pow(x, 3) - 3 * Math.Pow(x,2) + 2*x-1;
+        Console.WriteLine(result);
 
 
 
