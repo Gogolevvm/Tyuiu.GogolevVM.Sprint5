@@ -1,43 +1,39 @@
-﻿using System.Reflection.PortableExecutable;
+﻿using System;
+using System.IO;
 using tyuiu.cources.programming.interfaces.Sprint5;
+
 namespace Tyuiu.GogolevVM.Sprint5.Task5.V20.Lib
 {
     public class DataService : ISprint5Task5V20
     {
         public double LoadFromDataFile(string path)
         {
+            double sum = 0;
             int count = 0;
-            double res = 0;
 
             string text = File.ReadAllText(path);
+            string[] strings = text.Split(new char[] { ',' },
+                                          StringSplitOptions.RemoveEmptyEntries);
 
-            string[] strings = text.Split(',');
-            List<string> wholeNumbers = new List<string>();
             foreach (string str in strings)
             {
-                if (int.TryParse(str.Trim(), out int number) &&  Math.Abs(number % 1) == 0)
+                string trimmedStr = str.Trim();
+
+                if (double.TryParse(trimmedStr,
+                    System.Globalization.NumberStyles.Any,
+                    System.Globalization.CultureInfo.InvariantCulture,
+                    out double number))
                 {
-                    
-                    wholeNumbers.Add(str);
-                    count++;
+                    // Проверка, что число целое
+                    if (Math.Abs(number % 1) < 0.000001)
+                    {
+                        sum += number;
+                        count++;
+                    }
                 }
             }
-            File.WriteAllLines(path, wholeNumbers);
 
-            using (StreamReader reader = new StreamReader(path))
-            {
-                string line;
-                while ((line = reader.ReadLine()) != null)
-                {
-                    // условие while
-                    res = res + Convert.ToDouble(line);
-                }
-            }
-            res = res / count;
-            return res;
-            
-
-
+            return count > 0 ? sum / count : 0;
         }
     }
 }
