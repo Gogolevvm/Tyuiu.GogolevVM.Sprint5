@@ -1,40 +1,49 @@
-﻿using System;
-using System.Globalization;
-using System.IO;
+﻿using System.Reflection.PortableExecutable;
 using tyuiu.cources.programming.interfaces.Sprint5;
-
 namespace Tyuiu.GogolevVM.Sprint5.Task5.V20.Lib
 {
     public class DataService : ISprint5Task5V20
     {
         public double LoadFromDataFile(string path)
         {
-            string text = File.ReadAllText(path);
-
-            // Заменяем возможные запятые-разделители дробей на точки
-            string normalizedText = text.Replace(',', '.');
-
-            // Разделяем по запятым (как разделителям элементов)
-            string[] parts = normalizedText.Split(new char[] { ',' },
-                                                 StringSplitOptions.RemoveEmptyEntries);
-
-            double sum = 0;
             int count = 0;
+            double res = 0;
 
-            foreach (string part in parts)
+            //string text = File.ReadAllText(path);
+
+            //string[] strings = text.Split(',');
+            //List<string> wholeNumbers = new List<string>();
+            //foreach (string str in strings)
+            //{
+            //    if (int.TryParse(str.Trim(), out int number) &&  Math.Abs(number % 1) == 0)
+            //    {
+                    
+            //        wholeNumbers.Add(str);
+            //        count++;
+            //    }
+            //}
+            //File.WriteAllLines(path, wholeNumbers);
+
+            using (StreamReader reader = new StreamReader(path))
             {
-                string trimmed = part.Trim();
-                if (double.TryParse(trimmed,
-                    NumberStyles.Any,
-                    CultureInfo.InvariantCulture,
-                    out double number))
+                string line;
+                while ((line = reader.ReadLine()) != null)
                 {
-                    sum += number;
-                    count++;
+                    if (int.TryParse(line.Trim(), out int number) && Math.Abs(number%1) == 0)
+                    {
+                        // условие while
+                        res = res + Convert.ToDouble(line);
+                        count++;
+                    }
+
+                    
                 }
             }
+            res = res / count;
+            return res;
+            
 
-            return count > 0 ? sum / count : 0;
+
         }
     }
 }
