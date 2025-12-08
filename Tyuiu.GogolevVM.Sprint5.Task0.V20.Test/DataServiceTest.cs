@@ -11,7 +11,7 @@ namespace Tyuiu.GogolevVM.Sprint5.Task0.V20.Test
             FileInfo FileInfo = new FileInfo(path);
             bool fileExists = FileInfo.Exists;
             bool wait = true;
-            Assert.AreEqual(true, fileExists);
+            Assert.AreEqual(wait, fileExists);
         }
     }
 }

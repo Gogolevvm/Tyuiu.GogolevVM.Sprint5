@@ -3,15 +3,13 @@ internal class Program
 {
     private static void Main(string[] args)
     {
-        int[,] array = { { -5,7,-4 }, {10,-12,-4 }, {14,8,3} };
-        int rowSum = 0;
-
-        for (int j = 0; j < array.GetLength(1); j++)
+        string outputFile = "OutPutFileTask3.bin";
+        double x3 = 4;
+        double result10 = 2 *  Math.Pow(x3, 4) - 3 * Math.Pow(x3,3) + 5 * Math.Pow(x3,2) - 6 * x3 + 1 ;
+        using (BinaryWriter writer = new BinaryWriter(File.Open(outputFile,FileMode.Append)))
         {
-            rowSum -= array[0,j];
+            writer.Write(result10);
         }
-
-        File.WriteAllText("OutPutFileTask2.csv", rowSum.ToString());
 
 
 
