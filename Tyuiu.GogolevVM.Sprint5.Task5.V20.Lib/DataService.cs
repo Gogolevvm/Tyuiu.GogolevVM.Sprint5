@@ -1,50 +1,48 @@
-﻿using System.Reflection.PortableExecutable;
+﻿using System.Globalization;
+using System.IO;
 using tyuiu.cources.programming.interfaces.Sprint5;
+
 namespace Tyuiu.GogolevVM.Sprint5.Task5.V20.Lib
 {
     public class DataService : ISprint5Task5V20
     {
         public double LoadFromDataFile(string path)
         {
+            double sum = 0;
             int count = 0;
-            double res = 0;
 
-            //string text = File.ReadAllText(path);
+            // Читаем весь файл
+            string text = File.ReadAllText(path);
 
-            //string[] strings = text.Split(',');
-            //List<string> wholeNumbers = new List<string>();
-            //foreach (string str in strings)
-            //{
-            //    if (int.TryParse(str.Trim(), out int number) &&  Math.Abs(number % 1) == 0)
-            //    {
-                    
-            //        wholeNumbers.Add(str);
-            //        count++;
-            //    }
-            //}
-            //File.WriteAllLines(path, wholeNumbers);
+            // Разделяем по запятым (может быть одна строка: "1, 2, 3.25, 4, 5")
+            string[] numbers = text.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
 
-            using (StreamReader reader = new StreamReader(path))
+            // Используем инвариантную культуру для парсинга
+            CultureInfo culture = CultureInfo.InvariantCulture;
+
+            foreach (string numStr in numbers)
             {
-                string line;
-                while ((line = reader.ReadLine()) != null)
-                {
-                    if (int.TryParse(line.Trim(), out int number) && Math.Abs(number%1) == 0)
-                    {
-                        // условие while
-                        res = res + Convert.ToDouble(line);
-                        count++;
-                    }
+                string trimmed = numStr.Trim();
 
-                    
+                // Пробуем распарсить как double (и целые, и дробные)
+                if (double.TryParse(trimmed, NumberStyles.Any, culture, out double number))
+                {
+                    sum += number;
+                    count++;
                 }
             }
-            res = res / count;
-            res = Math.Round(res,3);
-            return res;
-            
 
+            // Если чисел нет - возвращаем 0 вместо NaN
+            if (count == 0)
+                return 0;
 
+            // Вычисляем среднее
+            double average = sum / count;
+
+            // Округляем до 3 знаков
+            average = Math.Round(average, 3);
+
+            return average;
         }
     }
 }
