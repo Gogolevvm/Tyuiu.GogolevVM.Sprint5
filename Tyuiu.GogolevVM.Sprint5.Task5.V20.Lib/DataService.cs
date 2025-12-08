@@ -9,30 +9,24 @@ namespace Tyuiu.GogolevVM.Sprint5.Task5.V20.Lib
     {
         public double LoadFromDataFile(string path)
         {
+            string text = File.ReadAllText(path);
+
+            // Заменяем возможные запятые-разделители дробей на точки
+            string normalizedText = text.Replace(',', '.');
+
+            // Разделяем по запятым (как разделителям элементов)
+            string[] parts = normalizedText.Split(new char[] { ',' },
+                                                 StringSplitOptions.RemoveEmptyEntries);
+
             double sum = 0;
             int count = 0;
 
-            string text = File.ReadAllText(path);
-
-            // Разделяем по запятым, удаляя пустые элементы
-            string[] strings = text.Split(new char[] { ',' },
-                                        StringSplitOptions.RemoveEmptyEntries);
-
-            // Используем инвариантную культуру (точка как разделитель дробей)
-            CultureInfo culture = CultureInfo.InvariantCulture;
-
-            foreach (string str in strings)
+            foreach (string part in parts)
             {
-                string trimmedStr = str.Trim();
-
-                // Пропускаем полностью пустые строки
-                if (string.IsNullOrWhiteSpace(trimmedStr))
-                    continue;
-
-                // Пробуем преобразовать в double
-                if (double.TryParse(trimmedStr,
-                    NumberStyles.Float | NumberStyles.AllowThousands,
-                    culture,
+                string trimmed = part.Trim();
+                if (double.TryParse(trimmed,
+                    NumberStyles.Any,
+                    CultureInfo.InvariantCulture,
                     out double number))
                 {
                     sum += number;
@@ -40,12 +34,7 @@ namespace Tyuiu.GogolevVM.Sprint5.Task5.V20.Lib
                 }
             }
 
-            // Если чисел не найдено - возвращаем 0
-            if (count == 0)
-                return 0;
-
-            // Возвращаем среднее арифметическое
-            return sum / count;
+            return count > 0 ? sum / count : 0;
         }
     }
 }
