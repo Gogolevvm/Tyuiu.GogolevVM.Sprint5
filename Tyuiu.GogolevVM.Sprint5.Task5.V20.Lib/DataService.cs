@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using System.IO;
 using tyuiu.cources.programming.interfaces.Sprint5;
 
@@ -11,36 +12,51 @@ namespace Tyuiu.GogolevVM.Sprint5.Task5.V20.Lib
             double sum = 0;
             int count = 0;
 
-            // Читаем весь файл
-            string text = File.ReadAllText(path);
+            // Читаем все строки файла
+            string[] lines = File.ReadAllLines(path);
 
-            // Разделяем по запятым (может быть одна строка: "1, 2, 3.25, 4, 5")
-            string[] numbers = text.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-
-            // Используем инвариантную культуру для парсинга
-            CultureInfo culture = CultureInfo.InvariantCulture;
-
-            foreach (string numStr in numbers)
+            foreach (string line in lines)
             {
-                string trimmed = numStr.Trim();
+                string trimmedLine = line.Trim();
 
-                // Пробуем распарсить как double (и целые, и дробные)
-                if (double.TryParse(trimmed, NumberStyles.Any, culture, out double number))
+                // Пропускаем пустые строки
+                if (string.IsNullOrWhiteSpace(trimmedLine))
+                    continue;
+
+                // Пробуем распарсить как целое число
+                if (int.TryParse(trimmedLine, out int intNumber))
                 {
-                    sum += number;
+                    // Это целое число
+                    sum += intNumber;
                     count++;
+                }
+                else
+                {
+                    // Пробуем как double, чтобы проверить, не дробное ли это число
+                    if (double.TryParse(trimmedLine,
+                        NumberStyles.Float | NumberStyles.AllowLeadingSign,
+                        CultureInfo.InvariantCulture,
+                        out double doubleNumber))
+                    {
+                        // Проверяем, целое ли число (с учетом погрешности округления)
+                        if (Math.Abs(doubleNumber % 1) < 0.0000001)
+                        {
+                            sum += doubleNumber;
+                            count++;
+                        }
+                    }
                 }
             }
 
-            // Если чисел нет - возвращаем 0 вместо NaN
+            // Если целых чисел не найдено, возвращаем 0
             if (count == 0)
                 return 0;
 
             // Вычисляем среднее
             double average = sum / count;
 
-            // Округляем до 3 знаков
-            average = Math.Round(average, 3);
+            // Округляем до 3 знаков после запятой
+            average = Math.Round(average, 3, MidpointRounding.AwayFromZero);
 
             return average;
         }
