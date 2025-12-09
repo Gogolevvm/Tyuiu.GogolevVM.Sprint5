@@ -31,7 +31,7 @@ internal class Program
         Console.WriteLine("****************************************************************************");
 
         double res = ds.LoadFromDataFile(path);
-        Console.WriteLine("Сумма элементов файла = " + res);
+        Console.WriteLine("Среднее значеие файла = " + res);
 
     }
 }
